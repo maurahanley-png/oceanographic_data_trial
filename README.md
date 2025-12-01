@@ -13,7 +13,7 @@ This trial exercise must be completed with good practice, and minimal assistance
 ### Here are the instructions that you received via email:
 
 1. If you have not already, create a github account: https://github.com/ and download the github desktop app.
-1. Clone this repository to your local machine **by Sunday Dec. 7th**. After this date, the repo will no longer be available.
+1. Clone this repository: https://github.com/jvcarrick/oceanographic_data_trial.git to your local machine **by Sunday Dec. 7th**. After this date, the repo will no longer be available.
 1. Familiarize yourself with the contents of the repo, including the “README.md” file that contains information about the data and directory structure and the coding instructions.
 1. Create a new R project using the existing repository directory.
 1. In a new R script within the project, write a code to import, re-format, visualize, and export the given data from the coding instructions provided. Ensure that all your code is well-commented.
