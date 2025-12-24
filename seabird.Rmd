@@ -1,0 +1,87 @@
+---
+title: "Seabird Data"
+output: html_document
+date: "2025-12-19"
+---
+
+```{r}
+library(oce)
+var = list.files(path = "./Data/", pattern ="*.cnv" ) 
+fileName = file.path("./Data/",var)
+seabird_data <- oce::read.ctd(fileName) 
+seabird_data <- oceSetMetadata(seabird_data, "deploymentType", "moored")
+#seabird_data[["timeS"]] makes all time data show up
+start_time <- seabird_data[["timeS"]][1]
+plot(seabird_data)
+
+
+```
+```{r}
+Temperature <- seabird_data[["temperature"]]
+Salin <- seabird_data[["salinity"]]
+Fluorescence <- seabird_data[["fluorescence"]]
+Turbidity <- seabird_data[["turbidity"]]
+Oxygen <- seabird_data[["oxygen"]]
+Times <- seabird_data[["timeS"]]
+timebase <- seabird_data@metadata[["startTime"]]
+Date <- as.POSIXct(Times, origin = timebase, tz="UTC")
+#print(atimebase) used to check if code is working
+df <- data.frame(Date,Temperature, Salin, Fluorescence, Turbidity, Oxygen)
+```
+
+```{r}
+library(ggplot2)
+library(dplyr)
+png(filename = "ctd_temperaure.png")
+ggplot(df, aes(x = Date, y=Temperature))+
+  ylab("Temperature (°C)")+
+  geom_line()+
+  theme_bw()+
+  theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank())
+
+
+
+
+
+```
+
+
+```
+```{r}
+
+```
+
+`
+```
+```{r}
+library(tidyr)
+library(ggplot2)
+Variable <- "Temperature, Salin, Fluorescence, Turbidity, Oxygen"
+df_long <- df %>%
+  pivot_longer(!Date, names_to = c("Variable"), values_to = "Value")
+my_colors <- c("green", "blue", "orange", "red", "purple")
+png(filename = "ctd_all_variables.png")
+ggplot(data = df_long, aes(x=Date, y=Value, color = Variable))+
+  geom_line()+
+  facet_wrap(~Variable, nrow=5, scales = "free_y")+
+  scale_color_manual(values = my_colors)+
+  theme_bw()+
+  theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank(), strip.background = element_rect(fill="white", color = "black") )+
+  guides(color = "none")
+  
+
+#guides removes the color legend
+
+
+```
+```{r}
+#convertives tables into csv
+write.csv(df_long, file = "ctd_long.csv", row.names = FALSE)
+```
+
+```{r}
+#needed readr b/c of size I think, dont need row.names when using readr, false is default
+library(readr)
+write.csv(df, file = "ctd_wide.csv", row.names = FALSE)
+```
+
